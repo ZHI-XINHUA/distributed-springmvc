@@ -5,9 +5,15 @@
 
 
 # study
-## 一、使用zk实现分布式
+## 一、使用zk实现分布式锁
 参考：imooc
 
 代码：https://github.com/ZHI-XINHUA/distributed-springmvc/blob/master/src/test/java/com/zxh/zk/ZKDistributedLockTest.java
+
+## 二、使用redis实现分布式锁
+
+
+## 三、使用Redisson实现分布式锁
+
 
 

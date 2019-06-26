@@ -22,3 +22,22 @@ CREATE TABLE `appointment` (
   PRIMARY KEY (`book_id`, `student_id`),
   INDEX `idx_appoint_time` (`appoint_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='预约图书表';
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders`  (
+  `id` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `order_num` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_unicode_ci ROW_FORMAT = Dynamic;
+
+
+DROP TABLE IF EXISTS `merchandise`;
+CREATE TABLE `merchandise`  (
+  `id` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `num` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+
+
+SET FOREIGN_KEY_CHECKS = 1;
