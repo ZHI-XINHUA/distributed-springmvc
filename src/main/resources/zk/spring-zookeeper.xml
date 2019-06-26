@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--重试策略:重试3次，每次5000毫秒-->
+	<bean id="retryPolicy" class="org.apache.curator.retry.RetryNTimes">
+		<constructor-arg name="n" value="3"></constructor-arg>
+		<constructor-arg name="sleepMsBetweenRetries" value="5000"></constructor-arg>
+	</bean>
+
+
+	<!--zk 客户端配置 -->
+	<bean id="zkClient" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient" init-method="start">
+		<!--zk连接地址，集群用逗号隔开-->
+		<constructor-arg name="connectString" value="192.168.20.141:2181"></constructor-arg>
+		<!--连接超时时间-->
+		<constructor-arg name="connectionTimeoutMs" value="1500"></constructor-arg>
+		<!--会话超时时间-->
+		<constructor-arg name="sessionTimeoutMs" value="15000"></constructor-arg>
+		<!--重试策略-->
+		<constructor-arg name="retryPolicy" ref="retryPolicy"></constructor-arg>
+	</bean>
+
+	<!--自定义zk客户端-->
+	<bean id="zkCurator" class="com.zxh.zk.zkcurator.utils.ZKCurator" init-method="init">
+		<constructor-arg name="client" ref="zkClient"></constructor-arg>
+	</bean>
+
+	<!--分布式锁-->
+	<bean id="distributedLock" class="com.zxh.zk.zkcurator.utils.DistributedLock" init-method="init">
+		<constructor-arg name="client" ref="zkClient"></constructor-arg>
+	</bean>
+
+</beans>
