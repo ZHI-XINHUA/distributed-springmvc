@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import java.io.*;
 import java.net.URI;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * fdfs api 操作
@@ -186,6 +187,89 @@ public class FdfsApp {
             }
 
         }
+
+    }
+
+    CountDownLatch latch = new CountDownLatch(2);
+    @Test
+    public void readFileSeek() throws IOException, InterruptedException {
+
+        //读第一块128m
+       new Thread(()->{
+           System.out.println("第一块开始下载......");
+
+           FSDataInputStream inputStream = null;
+           FileOutputStream outputStream = null;
+           try {
+               //获取输入流
+               inputStream = fileSystem.open(new Path("/hbase-2.2.0-bin.tar.gz"));
+               //创建输出流
+               outputStream = new FileOutputStream("F:\\test\\hbase-2.2.0-bin.tar.gz.part1");
+               //流的拷贝
+               byte[] buf = new byte[1024];
+               //读128m
+               for(int i=0;i<1024*128;i++){
+                   inputStream.read(buf);
+                   outputStream.write(buf);
+               }
+
+
+           } catch (FileNotFoundException e) {
+               e.printStackTrace();
+           } catch (IOException e) {
+               e.printStackTrace();
+           }finally {
+               //关闭资源
+               IOUtils.closeStream(outputStream);
+               IOUtils.closeStream(inputStream);
+               latch.countDown();
+               System.out.println("第一块下载完成......");
+           }
+
+       }).start();
+
+       //读第二块
+        new Thread(()->{
+            System.out.println("第二块开始下载......");
+            FSDataInputStream inputStream = null;
+
+            FileOutputStream outputStream = null;
+            try {
+                //获取输入流
+                inputStream = fileSystem.open(new Path("/hbase-2.2.0-bin.tar.gz"));
+                //创建输出流
+                outputStream = new FileOutputStream("F:\\test\\hbase-2.2.0-bin.tar.gz.part2");
+
+                // 定位输入数据位置
+                inputStream.seek(1024*1024*128);
+
+                //流的对拷
+                IOUtils.copyBytes(inputStream,outputStream,1024);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+                //关闭资源
+                IOUtils.closeStream(outputStream);
+                IOUtils.closeStream(inputStream);
+                latch.countDown();
+                System.out.println("第二块下载完成......");
+            }
+        }).start();
+
+
+        latch.await();
+
+
+        System.out.println("下载完成......\n开始合并....");
+
+
+        Runtime runtime = Runtime.getRuntime();
+        Process p =runtime.exec("cmd.exe /c type F:\\test\\hbase-2.2.0-bin.tar.gz.part2>>F:\\test\\hbase-2.2.0-bin.tar.gz.part1");
+        System.out.println(p.toString());
+
 
     }
 
