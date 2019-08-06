@@ -37,7 +37,9 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
         String[] words = line.split(" ");
         //3、输出mapper
         for (String word:words) {
+            if("".equals(word.trim())) continue;
             k.set(word);
+            //System.out.println("map>>>key="+key+" value="+v);
             context.write(k,v);
         }
 

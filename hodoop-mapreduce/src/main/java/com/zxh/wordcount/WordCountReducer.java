@@ -15,8 +15,8 @@ import java.io.IOException;
  *     IntWritable：reducer输出结果的value
  */
 public class WordCountReducer extends Reducer<Text, IntWritable,Text,IntWritable> {
-    int sum ;
     IntWritable v = new IntWritable();
+
     /**
      * 计算个数
      * @param key
@@ -28,11 +28,12 @@ public class WordCountReducer extends Reducer<Text, IntWritable,Text,IntWritable
     @Override
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
         //1、累计求和
-        sum = 0;
+        int sum = 0;
         for (IntWritable count :values) {
             sum += count.get();
         }
         v.set(sum);
+        //System.out.println("key="+key+"  vlaue="+values);
         //2、输出计算结果
         context.write(key,v);
     }
