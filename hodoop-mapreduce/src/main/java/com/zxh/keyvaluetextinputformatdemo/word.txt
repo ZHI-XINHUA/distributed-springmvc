@@ -1,0 +1,5 @@
+需求：统计文件中每一行第一个单词相同的个数
+banzhang ni hao
+xihuan hadoop banzhang
+banzhang ni hao
+xihuan hadoop banzhang
