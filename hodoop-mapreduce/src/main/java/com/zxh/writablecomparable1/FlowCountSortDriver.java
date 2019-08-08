@@ -30,9 +30,15 @@ public class FlowCountSortDriver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FlowBean.class);
 
+        //加载自定义分区类
+        job.setPartitionerClass(ProvincePartitioner.class);
+        // 设置Reducetask个数
+        job.setNumReduceTasks(5);
+
         //6、设置输入和输出路径
         FileInputFormat.setInputPaths(job,new Path(args[0]));
         FileOutputFormat.setOutputPath(job,new Path(args[1]));
+
 
         //7、提交任务
         job.waitForCompletion(true);
