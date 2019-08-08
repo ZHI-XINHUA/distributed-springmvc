@@ -3,9 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.zxh</groupId>
 	<artifactId>distributed-springmvc</artifactId>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>distributed-springmvc</name>
+    <modules>
+        <module>hodoop-mapreduce</module>
+    </modules>
+    <name>distributed-springmvc</name>
 	<url></url>
 
 	<properties>
@@ -185,7 +188,7 @@
 			<version>4.5.15</version>
 		</dependency>
 
-		<!--hadoop client-->
+		<!--======hadoop client=====-->
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-common</artifactId>
@@ -200,6 +203,22 @@
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-client</artifactId>
 			<version>2.9.2</version>
+		</dependency>
+		<!--====hbase=====-->
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-server</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-common</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-client</artifactId>
+			<version>2.2.0</version>
 		</dependency>
 	</dependencies>
 
